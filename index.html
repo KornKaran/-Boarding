@@ -2,110 +2,358 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boarding Summary</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AOD Boarding Summary</title>
     <style>
+        /* AOD Carbon Black Theme - Optimized for Battery Saving */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #000000; /* Pitch Black for OLED efficiency */
+            color: #E0E0E0; /* Soft white for readability */
             margin: 0;
-            padding: 15px;
+            padding: 10px;
+            overscroll-behavior: none; /* Disable bounce scroll on mobile */
         }
+
         .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: #0A0A0A; /* Very dark gray for contrast */
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #1E1E1E; /* Subtle border */
             max-width: 500px;
             margin: 0 auto;
+            box-shadow: none; /* Remove shadows to save pixels */
         }
+
         h2 {
             text-align: center;
-            color: #2c3e50;
+            color: #FFFFFF;
             margin-top: 0;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 1.2em;
         }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
+
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             font-weight: bold;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            color: #A0A0A0; /* Muted labels */
         }
+
         input[type="text"], input[type="time"], select, textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #333333;
+            border-radius: 6px;
             box-sizing: border-box;
-            font-size: 16px; /* ป้องกัน iOS ซูม */
+            font-size: 16px;
+            background-color: #121212; /* Dark input background */
+            color: #FFFFFF;
+            -webkit-appearance: none; /* Fix iOS styling */
         }
+
+        input::placeholder {
+            color: #555555;
+        }
+
+        /* Force Uppercase Constraint maintained */
+        .uppercase-input {
+            text-transform: uppercase;
+        }
+
         .row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
+
         .row .form-group {
             flex: 1;
         }
+
         .counter-group {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
+            background-color: #050505; /* Deep black background for counters */
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #1A1A1A;
         }
+
         .counter-btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            font-size: 20px;
+            background-color: transparent; /* No fill to save pixels */
+            border: 2px solid;
+            width: 44px;
+            height: 44px;
+            font-size: 24px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: opacity 0.2s;
         }
-        .counter-btn.minus { background-color: #e74c3c; }
+
+        .counter-btn:active {
+            opacity: 0.5;
+        }
+
+        /* Muted Blue for PLUS */
+        .counter-btn.plus {
+            color: #1565C0;
+            border-color: #1565C0;
+        }
+
+        /* Muted Red for MINUS */
+        .counter-btn.minus {
+            color: #B71C1C;
+            border-color: #B71C1C;
+        }
+
         .counter-value {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
-            min-width: 40px;
+            color: #FFFFFF;
+            min-width: 50px;
             text-align: center;
         }
-        .btn-generate, .btn-copy {
+
+        .btn-main {
             width: 100%;
             padding: 12px;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             font-size: 16px;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 10px;
             font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: filter 0.2s;
         }
-        .btn-generate { background-color: #2ecc71; }
-        .btn-copy { background-color: #f39c12; }
+
+        .btn-main:active {
+            filter: brightness(0.8);
+        }
+
+        /* Muted Dark Green for Generate */
+        .btn-generate {
+            background-color: #2E7D32;
+        }
+
+        /* Muted Dark Orange for Copy */
+        .btn-copy {
+            background-color: #EF6C00;
+        }
+
+        /* Retro Terminal Style for Result Area - Pixel efficient */
         .result-area {
             width: 100%;
-            height: 200px;
+            height: 220px;
             margin-top: 15px;
-            padding: 10px;
+            padding: 12px;
             box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #eee;
+            border: 2px dashed #333333;
+            border-radius: 8px;
+            background-color: #050505; /* Near Black */
+            color: #00E676; /* Muted Retro Green Terminal text */
+            font-family: 'Courier New', Courier, monospace; /* Monospace for terminal feel */
             font-size: 14px;
             resize: none;
+            overflow-y: auto;
         }
-        hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #1E1E1E;
+            margin: 15px 0;
+        }
+
+        .disclaimer {
+            font-size: 0.8em;
+            color: #666666;
+            margin-top: 15px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
     </style>
 </head>
+<body>
+
+<div class="container">
+    <h2>บันทึกข้อมูล Boarding</h2>
+    
+    <!-- ข้อมูลเที่ยวบิน (บังคับพิมพ์ใหญ่) -->
+    <div class="row">
+        <div class="form-group">
+            <label>Flight No.</label>
+            <input type="text" id="flightNo" class="uppercase-input" placeholder="เช่น PG109" oninput="this.value = this.value.toUpperCase()" autocapitalize="characters" autocorrect="off">
+        </div>
+        <div class="form-group">
+            <label>เวลา</label>
+            <input type="time" id="flightTime">
+        </div>
+        <div class="form-group">
+            <label>GATE</label>
+            <input type="text" id="gate" class="uppercase-input" placeholder="เช่น A9" oninput="this.value = this.value.toUpperCase()" autocapitalize="characters" autocorrect="off">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label>จาก (Origin)</label>
+            <input type="text" id="origin" class="uppercase-input" placeholder="BKK" oninput="this.value = this.value.toUpperCase()" autocapitalize="characters" autocorrect="off" maxlength="3">
+        </div>
+        <div class="form-group">
+            <label>ปลายทาง (Dest)</label>
+            <input type="text" id="destination" class="uppercase-input" placeholder="USM" oninput="this.value = this.value.toUpperCase()" autocapitalize="characters" autocorrect="off" maxlength="3">
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ระบบนับจำนวน (AOD Style Counters) -->
+    <label>ผู้โดยใช้ BIO (คน)</label>
+    <div class="counter-group">
+        <button class="counter-btn minus" onclick="updateCounter('bio', -1)">-</button>
+        <span class="counter-value" id="bioVal">0</span>
+        <button class="counter-btn plus" onclick="updateCounter('bio', 1)">+</button>
+    </div>
+
+    <label>ผ่าน (คน)</label>
+    <div class="counter-group">
+        <button class="counter-btn minus" onclick="updateCounter('pass', -1)">-</button>
+        <span class="counter-value" id="passVal">0</span>
+        <button class="counter-btn plus" onclick="updateCounter('pass', 1)">+</button>
+    </div>
+
+    <label>ไม่ผ่าน (คน)</label>
+    <div class="counter-group">
+        <button class="counter-btn minus" onclick="updateCounter('fail', -1)">-</button>
+        <span class="counter-value" id="failVal">0</span>
+        <button class="counter-btn plus" onclick="updateCounter('fail', 1)">+</button>
+    </div>
+
+    <hr>
+
+    <!-- สถานะระบบ -->
+    <div class="form-group">
+        <label>Set flight</label>
+        <select id="setFlight">
+            <option value="ได้ปกติ">ได้ปกติ</option>
+            <option value="ไม่ปกติ">ไม่ปกติ</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Lane A Biometric</label>
+        <select id="laneA">
+            <option value="ได้ปกติ">ได้ปกติ</option>
+            <option value="ไม่ปกติ">ไม่ปกติ</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Lane B สแกน Boarding pass</label>
+        <select id="laneB">
+            <option value="ได้ปกติ">ได้ปกติ</option>
+            <option value="ไม่ปกติ">ไม่ปกติ</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>หมายเหตุ (Remarks)</label>
+        <textarea id="remarks" rows="2" placeholder="ใส่หมายเหตุ (ถ้ามี)"></textarea>
+    </div>
+
+    <button class="btn-main btn-generate" onclick="generateReport()">สร้างข้อความสรุป</button>
+
+    <!-- Terminal style result area -->
+    <textarea id="resultArea" class="result-area" readonly placeholder="> ข้อความสรุปจะแสดงที่นี่..."></textarea>
+    
+    <button class="btn-main btn-copy" onclick="copyText()">คัดลอกข้อความ</button>
+
+    <!-- หมายเหตุความเป็นส่วนตัว -->
+    <div class="disclaimer">
+        🔒 เครื่องมือนี้รันบนอุปกรณ์ของคุณเท่านั้น ไม่มี 
+        การบันทึกหรือส่งข้อมูลออกสู่ภายนอก
+    </div>
+</div>
+
+<script>
+    // ตัวแปรเก็บจำนวนนับ
+    let counts = { bio: 0, pass: 0, fail: 0 };
+
+    // ฟังก์ชันอัปเดตตัวเลข
+    function updateCounter(type, change) {
+        counts[type] += change;
+        if (counts[type] < 0) counts[type] = 0; // ไม่ให้ติดลบ
+        document.getElementById(type + 'Val').innerText = counts[type];
+    }
+
+    // ฟังก์ชันสร้างข้อความสรุป
+    function generateReport() {
+        const flightNo = document.getElementById('flightNo').value.toUpperCase() || "[ไฟต์นัมเบอร์]";
+        const flightTime = document.getElementById('flightTime').value || "[เวลา]";
+        const gateInput = document.getElementById('gate').value.toUpperCase();
+        const gate = gateInput ? `GATE ${gateInput}` : "[GATE]";
+        const origin = document.getElementById('origin').value.toUpperCase() || "[จาก]";
+        const dest = document.getElementById('destination').value.toUpperCase() || "[ปลายทาง]";
+        
+        const setFlight = document.getElementById('setFlight').value;
+        const laneA = document.getElementById('laneA').value;
+        const laneB = document.getElementById('laneB').value;
+        const remarks = document.getElementById('remarks').value;
+
+        // จัดรูปแบบข้อความ
+        let text = `${flightNo} ${flightTime} ${gate}\n`;
+        text += `${origin} to ${dest}\n`;
+        text += `ผู้โดยใช้ BIO = ${counts.bio} คน\n`;
+        text += `ผ่าน = ${counts.pass} คน\n`;
+        text += `ไม่ผ่าน = ${counts.fail} คน\n`;
+        text += `Set flight ${setFlight}\n`;
+        text += `Lane A Biometric ${laneA}\n`;
+        text += `Lane B สแกน Boarding pass ${laneB}`;
+        
+        if (remarks.trim() !== "") {
+            text += `\n*${remarks}`;
+        }
+
+        document.getElementById('resultArea').value = text;
+        
+        // Auto scroll to bottom of the result area
+        const resultArea = document.getElementById('resultArea');
+        resultArea.scrollTop = resultArea.scrollHeight;
+    }
+
+    // ฟังก์ชันคัดลอกข้อความ
+    function copyText() {
+        const resultArea = document.getElementById('resultArea');
+        if(resultArea.value === "" || resultArea.value.startsWith("> ข้อความ")) {
+            alert("⚠️ กรุณากด 'สร้างข้อความสรุป' ก่อนคัดลอกครับ!");
+            return;
+        }
+        
+        resultArea.select();
+        resultArea.setSelectionRange(0, 99999); 
+        navigator.clipboard.writeText(resultArea.value).then(() => {
+            alert("✅ คัดลอกข้อความสรุปเรียบร้อยแล้ว!");
+        }).catch(err => {
+            alert("❌ ไม่สามารถคัดลอกอัตโนมัติได้ กรุณาคลุมดำคัดลอกเองครับ");
+        });
+    }
+</script>
+
+</body>
+</html>
 <body>
 
 <div class="container">
