@@ -3,34 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOD Boarding Summary</title>
+    <title>Agent Boarding System</title>
     <style>
-        /* AOD Carbon Black Theme - Optimized for Battery Saving */
+        /* Modern Navy-Blue Theme (Spy Tech Style) */
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #000000; /* Pitch Black for OLED efficiency */
-            color: #E0E0E0; /* Soft white for readability */
+            background: radial-gradient(circle at center, #112240 0%, #0a192f 100%);
+            color: #8892b0;
             margin: 0;
             padding: 10px;
-            overscroll-behavior: none; /* Disable bounce scroll on mobile */
+            overscroll-behavior: none;
+            min-height: 100vh;
         }
 
         .container {
-            background-color: #0A0A0A; /* Very dark gray for contrast */
+            background-color: rgba(17, 34, 64, 0.7);
             padding: 15px;
             border-radius: 12px;
-            border: 1px solid #1E1E1E; /* Subtle border */
+            border: 1px solid #233554;
             max-width: 500px;
             margin: 0 auto;
-            box-shadow: none; /* Remove shadows to save pixels */
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
         }
 
         h2 {
             text-align: center;
-            color: #FFFFFF;
+            color: #64ffda; /* Neon Cyan */
             margin-top: 0;
-            font-weight: 300;
-            letter-spacing: 1px;
+            font-weight: 400;
+            letter-spacing: 2px;
             text-transform: uppercase;
             font-size: 1.2em;
         }
@@ -42,28 +44,36 @@
         label {
             display: block;
             margin-bottom: 4px;
-            font-weight: bold;
+            font-weight: 500;
             font-size: 0.85em;
-            color: #A0A0A0; /* Muted labels */
+            color: #a8b2d1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         input[type="text"], input[type="time"], select, textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #333333;
+            border: 1px solid #233554;
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 16px;
-            background-color: #121212; /* Dark input background */
-            color: #FFFFFF;
-            -webkit-appearance: none; /* Fix iOS styling */
+            background-color: #0a192f;
+            color: #e6f1ff;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
         }
 
-        input::placeholder {
-            color: #555555;
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #64ffda;
+            box-shadow: 0 0 8px rgba(100, 255, 218, 0.2);
         }
 
-        /* Force Uppercase Constraint maintained */
+        input::placeholder, textarea::placeholder {
+            color: #495670;
+        }
+
         .uppercase-input {
             text-transform: uppercase;
         }
@@ -81,16 +91,17 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background-color: #050505; /* Deep black background for counters */
+            background-color: #0a192f;
             padding: 8px;
             border-radius: 8px;
             margin-bottom: 8px;
-            border: 1px solid #1A1A1A;
+            border: 1px solid #233554;
         }
 
         .counter-btn {
-            background-color: transparent; /* No fill to save pixels */
-            border: 2px solid;
+            background-color: transparent;
+            border: 1px solid #64ffda;
+            color: #64ffda;
             width: 44px;
             height: 44px;
             font-size: 24px;
@@ -99,29 +110,27 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.2s;
+            transition: all 0.2s;
         }
 
         .counter-btn:active {
-            opacity: 0.5;
+            background-color: rgba(100, 255, 218, 0.2);
+            transform: scale(0.95);
         }
 
-        /* Muted Blue for PLUS */
-        .counter-btn.plus {
-            color: #1565C0;
-            border-color: #1565C0;
-        }
-
-        /* Muted Red for MINUS */
         .counter-btn.minus {
-            color: #B71C1C;
-            border-color: #B71C1C;
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+        
+        .counter-btn.minus:active {
+            background-color: rgba(255, 107, 107, 0.2);
         }
 
         .counter-value {
             font-size: 24px;
             font-weight: bold;
-            color: #FFFFFF;
+            color: #e6f1ff;
             min-width: 50px;
             text-align: center;
         }
@@ -129,61 +138,88 @@
         .btn-main {
             width: 100%;
             padding: 12px;
-            color: white;
-            border: none;
+            background-color: transparent;
+            color: #64ffda;
+            border: 1px solid #64ffda;
             border-radius: 6px;
             font-size: 16px;
             cursor: pointer;
             margin-top: 10px;
-            font-weight: bold;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: filter 0.2s;
+            transition: all 0.3s;
         }
 
         .btn-main:active {
-            filter: brightness(0.8);
+            background-color: rgba(100, 255, 218, 0.2);
+            transform: translateY(2px);
         }
 
-        /* Muted Dark Green for Generate */
-        .btn-generate {
-            background-color: #2E7D32;
-        }
-
-        /* Muted Dark Orange for Copy */
         .btn-copy {
-            background-color: #EF6C00;
+            color: #fca311;
+            border-color: #fca311;
         }
 
-        /* Retro Terminal Style for Result Area - Pixel efficient */
+        .btn-copy:active {
+            background-color: rgba(252, 163, 17, 0.2);
+        }
+
         .result-area {
-            width: 100%;
-            height: 220px;
+            height: 200px;
             margin-top: 15px;
-            padding: 12px;
-            box-sizing: border-box;
-            border: 2px dashed #333333;
-            border-radius: 8px;
-            background-color: #050505; /* Near Black */
-            color: #00E676; /* Muted Retro Green Terminal text */
-            font-family: 'Courier New', Courier, monospace; /* Monospace for terminal feel */
-            font-size: 14px;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #020c1b;
+            color: #64ffda;
+            border: 1px dashed #233554;
             resize: none;
-            overflow-y: auto;
         }
 
         hr {
             border: 0;
-            border-top: 1px solid #1E1E1E;
+            border-top: 1px solid #233554;
             margin: 15px 0;
         }
 
         .disclaimer {
-            font-size: 0.8em;
-            color: #666666;
+            font-size: 0.75em;
+            color: #495670;
             margin-top: 15px;
             text-align: center;
             line-height: 1.4;
+        }
+
+        /* --- Toast Notification System --- */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #112240;
+            color: #e6f1ff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            font-size: 14px;
+            border: 1px solid #64ffda;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(20px);
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #toast.warning {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
         }
 
     </style>
@@ -191,13 +227,12 @@
 <body>
 
 <div class="container">
-    <h2>บันทึกข้อมูล Boarding</h2>
+    <h2>[ BIO SYSTEM ]</h2>
     
-    <!-- ข้อมูลเที่ยวบิน (บังคับพิมพ์ใหญ่) -->
     <div class="row">
         <div class="form-group">
             <label>Flight No.</label>
-            <input type="text" id="flightNo" class="uppercase-input" placeholder="เช่น PG109" oninput="this.value = this.value.toUpperCase()" autocapitalize="characters" autocorrect="off">
+            <input type="text" id="flightNo" class="uppercase-input" placeholder="PG109" oninput="this.value = this.value.toUpperCase()" autocapitalize="characters" autocorrect="off">
         </div>
         <div class="form-group">
             <label>เวลา</label>
@@ -205,7 +240,7 @@
         </div>
         <div class="form-group">
             <label>GATE</label>
-            <input type="text" id="gate" class="uppercase-input" placeholder="เช่น A9" oninput="this.value = this.value.toUpperCase()" autocapitalize="characters" autocorrect="off">
+            <input type="text" id="gate" class="uppercase-input" placeholder="A9" oninput="this.value = this.value.toUpperCase()" autocapitalize="characters" autocorrect="off">
         </div>
     </div>
 
@@ -222,7 +257,6 @@
 
     <hr>
 
-    <!-- ระบบนับจำนวน (AOD Style Counters) -->
     <label>ผู้โดยใช้ BIO (คน)</label>
     <div class="counter-group">
         <button class="counter-btn minus" onclick="updateCounter('bio', -1)">-</button>
@@ -246,7 +280,6 @@
 
     <hr>
 
-    <!-- สถานะระบบ -->
     <div class="form-group">
         <label>Set flight</label>
         <select id="setFlight">
@@ -270,36 +303,51 @@
     </div>
 
     <div class="form-group">
-        <label>หมายเหตุ (Remarks)</label>
-        <textarea id="remarks" rows="2" placeholder="ใส่หมายเหตุ (ถ้ามี)"></textarea>
+        <label>หมายเหตุ</label>
+        <textarea id="remarks" rows="2" placeholder="ใส่หมายเหตุการทำงาน..."></textarea>
     </div>
 
-    <button class="btn-main btn-generate" onclick="generateReport()">สร้างข้อความสรุป</button>
+    <button class="btn-main" onclick="generateReport()">[ สร้างข้อความสรุป ]</button>
 
-    <!-- Terminal style result area -->
-    <textarea id="resultArea" class="result-area" readonly placeholder="> ข้อความสรุปจะแสดงที่นี่..."></textarea>
+    <textarea id="resultArea" class="result-area" readonly placeholder="> รอการประมวลผล..."></textarea>
     
-    <button class="btn-main btn-copy" onclick="copyText()">คัดลอกข้อความ</button>
+    <button class="btn-main btn-copy" onclick="copyText()">[ คัดลอกข้อความ ]</button>
 
-    <!-- หมายเหตุความเป็นส่วนตัว -->
     <div class="disclaimer">
-        🔒 เครื่องมือนี้รันบนอุปกรณ์ของคุณเท่านั้น ไม่มี 
-        การบันทึกหรือส่งข้อมูลออกสู่ภายนอก
+        🔒 SECURE LOCAL ENVIRONMENT
     </div>
 </div>
 
-<script>
-    // ตัวแปรเก็บจำนวนนับ
-    let counts = { bio: 0, pass: 0, fail: 0 };
+<!-- Toast Notification Container -->
+<div id="toast">ข้อความแจ้งเตือน</div>
 
-    // ฟังก์ชันอัปเดตตัวเลข
+<script>
+    let counts = { bio: 0, pass: 0, fail: 0 };
+    let toastTimeout;
+
+    // ระบบ Toast Notification
+    function showToast(message, type = 'success') {
+        const toast = document.getElementById("toast");
+        toast.innerText = message;
+        
+        if (type === 'warning') {
+            toast.className = "warning show";
+        } else {
+            toast.className = "show";
+        }
+
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(function(){ 
+            toast.className = toast.className.replace("show", ""); 
+        }, 2500); // หายไปใน 2.5 วินาที
+    }
+
     function updateCounter(type, change) {
         counts[type] += change;
-        if (counts[type] < 0) counts[type] = 0; // ไม่ให้ติดลบ
+        if (counts[type] < 0) counts[type] = 0; 
         document.getElementById(type + 'Val').innerText = counts[type];
     }
 
-    // ฟังก์ชันสร้างข้อความสรุป
     function generateReport() {
         const flightNo = document.getElementById('flightNo').value.toUpperCase() || "[ไฟต์นัมเบอร์]";
         const flightTime = document.getElementById('flightTime').value || "[เวลา]";
@@ -313,7 +361,6 @@
         const laneB = document.getElementById('laneB').value;
         const remarks = document.getElementById('remarks').value;
 
-        // จัดรูปแบบข้อความ
         let text = `${flightNo} ${flightTime} ${gate}\n`;
         text += `${origin} to ${dest}\n`;
         text += `ผู้โดยใช้ BIO = ${counts.bio} คน\n`;
@@ -329,29 +376,28 @@
 
         document.getElementById('resultArea').value = text;
         
-        // Auto scroll to bottom of the result area
         const resultArea = document.getElementById('resultArea');
         resultArea.scrollTop = resultArea.scrollHeight;
+
+        showToast("✓ สร้างข้อความสำเร็จ");
     }
 
-    // ฟังก์ชันคัดลอกข้อความ
     function copyText() {
         const resultArea = document.getElementById('resultArea');
-        if(resultArea.value === "" || resultArea.value.startsWith("> ข้อความ")) {
-            alert("⚠️ กรุณากด 'สร้างข้อความสรุป' ก่อนคัดลอกครับ!");
+        if(resultArea.value === "" || resultArea.value.startsWith("> รอการ")) {
+            showToast("⚠ กรุณากดสร้างข้อความก่อน", "warning");
             return;
         }
         
         resultArea.select();
         resultArea.setSelectionRange(0, 99999); 
         navigator.clipboard.writeText(resultArea.value).then(() => {
-            alert("✅ คัดลอกข้อความสรุปเรียบร้อยแล้ว!");
+            showToast("✓ คัดลอกลงคลิปบอร์ดแล้ว");
         }).catch(err => {
-            alert("❌ ไม่สามารถคัดลอกอัตโนมัติได้ กรุณาคลุมดำคัดลอกเองครับ");
+            showToast("⚠ ล้มเหลว กรุณาคัดลอกด้วยตนเอง", "warning");
         });
     }
 </script>
 
 </body>
 </html>
-
